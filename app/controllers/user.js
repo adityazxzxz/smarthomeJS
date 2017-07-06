@@ -27,6 +27,32 @@ function Todo(){
 		});
 	}
 
+	this.update = function(req, res) {
+    connection.acquire(function(err, con) {
+      con.query('update user set ? where id_user = ?', [req.body, req.body.id_user], function(err, result) {
+	        con.release();
+	        if (err) {
+	          res.send({status: 400, message: 'User update failed'});
+	        } else {
+	          res.send({status: 200, message: 'User updated successfully'});
+	        }
+	      });
+	    });
+	  };
+
+	this.delete = function(id, res) {
+	    connection.acquire(function(err, con) {
+	      con.query('delete from user where id_user = ?', [id], function(err, result) {
+	        con.release();
+	        if (err) {
+	          res.send({status: 400, message: 'Failed to delete'});
+	        } else {
+	          res.send({status: 200, message: 'Deleted successfully'});
+	        }
+	      });
+	    });
+	  };
+
 }
 
 module.exports = new Todo();
